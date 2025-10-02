@@ -22,7 +22,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('users.store') }}">
+                    <form method="POST" action="{{ route('users.store') }}" enctype="multipart/form-data">
                         @csrf
 
                         {{-- First Name --}}
@@ -76,6 +76,20 @@
                                    class="mt-1 block w-full border-gray-300 dark:border-gray-600
                                           dark:bg-gray-900 dark:text-gray-100 rounded-md shadow-sm"
                                    value="{{ old('password_confirmation') }}" required>
+                        </div>
+                        {{-- Avatar (File Upload) --}}
+                        <div class="mb-4">
+                            <label for="avatar" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                Avatar
+                            </label>
+                            <input type="file" name="avatar" id="avatar"
+                                   class="mt-1 block w-full text-sm text-gray-900 dark:text-gray-100
+                                          border-gray-300 dark:border-gray-600 rounded-md shadow-sm
+                                          file:mr-4 file:py-2 file:px-4
+                                          file:rounded-md file:border-0
+                                          file:text-sm file:font-semibold
+                                          file:bg-blue-50 file:text-blue-700
+                                          hover:file:bg-blue-100">
                         </div>
 
                         {{-- Submit Button --}}

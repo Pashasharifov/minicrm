@@ -21,7 +21,11 @@ class UserController extends Controller
         return view("users.create");
     }
     public function store(StoreUserRequest $request): RedirectResponse{
-        User::create($request->validated());
+        $data = $request->validated();
+        if($request->hasFile('avatar')){
+            $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        }
+        User::create($data);
         return redirect()->route('users.index');
     }
     public function edit(User $user): View{

@@ -24,6 +24,7 @@
                         <thead>
                             <tr class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
                                 <th class="px-4 py-2 border">#</th>
+                                <th class="px-4 py-2 border">Avatar</th>
                                 <th class="px-4 py-2 border">Name</th>
                                 <th class="px-4 py-2 border">Email</th>
                                 <th class="px-4 py-2 border">Date</th>
@@ -34,6 +35,18 @@
                             @forelse($users as $index => $user)
                                 <tr class="text-gray-800 dark:text-gray-200">
                                     <td class="px-4 py-2 border">{{ $index + 1 }}</td>
+                                    {{-- Avatar --}}
+                                    <td class="px-4 py-2 border">
+                                        <a href="{{ asset('storage/' . $user->avatar) }}" target="_blank">
+                                            @if ($user->avatar)
+                                            <img src="{{ asset('storage/' . $user->avatar) }}"
+                                            alt="Avatar"
+                                            class="w-16 h-16 rounded-full object-cover">
+                                            @else
+                                                <span class="text-gray-500 italic">No image</span>
+                                            @endif
+                                        </a>
+                                    </td>
                                     <td class="px-4 py-2 border">{{ $user->first_name . " " . $user->last_name }}</td>
                                     <td class="px-4 py-2 border">{{ $user->email }}</td>
                                     <td class="px-4 py-2 border">{{ $user->updated_at->format('d-m-Y H:i:s') ?? $user->created_at->format('d-m-Y H:i:s') }}</td>
