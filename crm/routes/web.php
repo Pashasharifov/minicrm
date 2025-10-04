@@ -18,6 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::resource("users", UserController::class);
     Route::resource("clients", ClientController::class);
     Route::resource("projects", ProjectController::class);
+    Route::resource("tasks", \App\Http\Controllers\TaskController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
