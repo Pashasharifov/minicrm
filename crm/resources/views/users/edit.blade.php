@@ -59,6 +59,45 @@
                                    value="{{ old('email', $user->email) }}" required>
                         </div>
 
+                        @if (Auth::user()->isAdmin())
+                         {{-- Permissions --}}
+                        <div class="mb-6">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Permissions</h3>
+
+                            @php
+                                $permissions = [
+                                    'users_create' => 'Create Users',
+                                    'users_edit' => 'Edit Users',
+                                    'users_delete' => 'Delete Users',
+                                    'users_view' => 'View Users',
+                                    'clients_create' => 'Create Clients',
+                                    'clients_edit' => 'Edit Clients',
+                                    'clients_delete' => 'Delete Clients',
+                                    'clients_view' => 'View Clients',
+                                    'projects_create' => 'Create Projects',
+                                    'projects_edit' => 'Edit Projects',
+                                    'projects_delete' => 'Delete Projects',
+                                    'projects_view' => 'View Projects',
+                                    'tasks_create' => 'Create Tasks',
+                                    'tasks_edit' => 'Edit Tasks',
+                                    'tasks_delete' => 'Delete Tasks',
+                                    'tasks_view' => 'View Tasks',
+                                ];
+                            @endphp
+
+                            <div class="grid grid-cols-2 gap-4">
+                                @foreach ($permissions as $key => $label)
+                                    <label class="flex items-center space-x-2">
+                                        <input type="checkbox" name="permissions[{{ $key }}]" value="1"
+                                            class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500"
+                                            @if(isset($user->permissions[$key]) && $user->permissions[$key]) checked @endif>
+                                        <span>{{ $label }}</span>
+                                    </label>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
+
                         {{-- Submit Buttons --}}
                         <div class="flex items-center justify-end">
                             <a href="{{ route('users.index') }}"

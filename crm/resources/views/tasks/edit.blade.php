@@ -35,8 +35,8 @@
                                     class="w-full rounded border-gray-300 dark:bg-gray-700 dark:border-gray-600" required>
                                 @foreach($projects as $project)
                                     <option value="{{ $project->id }}" {{ old('project_id', $task->project_id) == $project->id ? 'selected' : '' }}>
-                                        {{ $project->name }} ({{ $project->client->name ?? 'No Client' }})
-                                    </option>
+                                        {{ $project->title }}
+                                    </option>   
                                 @endforeach
                             </select>
                         </div>

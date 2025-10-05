@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PermissionHelper;
 use App\Models\Client;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use Illuminate\Contracts\View\View as ViewView;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class ClientController extends Controller
@@ -16,6 +18,7 @@ class ClientController extends Controller
      */
     public function index(): View
     {
+        PermissionHelper::authorizeOrAbort('clients_view');
         $clients = Client::paginate(10);
         return view("clients.index", compact('clients'));
     }
@@ -25,6 +28,8 @@ class ClientController extends Controller
      */
     public function create(): View
     {
+        PermissionHelper::authorizeOrAbort('clients_create');
+        PermissionHelper::authorizeOrAbort('clients_view');
         return view("clients.create");
     }
 
@@ -50,6 +55,9 @@ class ClientController extends Controller
      */
     public function edit(Client $client): View
     {
+        PermissionHelper::authorizeOrAbort('clients_edit');
+        PermissionHelper::authorizeOrAbort('clients_view');
+        $client = Client::findOrFail($client->id);
         return view('clients.edit', compact('client'));
     }
 
@@ -67,6 +75,8 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
+        PermissionHelper::authorizeOrAbort('clients_delete');
+        PermissionHelper::authorizeOrAbort('clients_view');
         $client->delete();
         return redirect()->route('clients.index');
     }

@@ -24,6 +24,8 @@ class User extends Authenticatable
         'email',
         'password',
         'avatar',
+        'permissions',
+        'role',
     ];
 
     /**
@@ -46,6 +48,22 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'permissions' => 'array',
         ];
+    }
+    public function isAdmin(): bool{
+        return $this->role === 'admin';
+    }
+    public function isOperator(): bool{
+        return $this->role === 'operator';
+    }
+    public function isUser(): bool{
+        return $this->role === 'user';
+    }
+    public function setRole(string $role): void{
+        if(in_array($role, ['admin', 'user', 'operator'])){
+            $this->role = $role;
+            $this->save();
+        }
     }
 }

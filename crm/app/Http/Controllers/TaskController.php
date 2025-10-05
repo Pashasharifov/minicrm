@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PermissionHelper;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
@@ -16,6 +17,14 @@ class TaskController extends Controller
      */
     public function index()
     {
+        PermissionHelper::authorizeOrAbort('tasks_view');
+        if (Auth::user()->isUser()) {
+            $tasks = Task::with(['project.client', 'assignedUser', 'creator'])
+                ->where('assigned_to', Auth::id())
+                // ->orWhere('created_by', Auth::id())
+                ->paginate(10);
+            return view('tasks.index', compact('tasks'));   
+        }
         $tasks = Task::with(['project.client', 'assignedUser', 'creator'])->paginate(10);
         return view('tasks.index', compact('tasks'));
     }
@@ -25,6 +34,8 @@ class TaskController extends Controller
      */
     public function create()
     {
+        PermissionHelper::authorizeOrAbort('tasks_create');
+        PermissionHelper::authorizeOrAbort('tasks_view');
         $projects = Project::with('client')->get();
         $users = User::all();
 
@@ -71,6 +82,8 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
+        PermissionHelper::authorizeOrAbort('tasks_edit');
+        PermissionHelper::authorizeOrAbort('tasks_view');
         $projects = Project::with('client')->get();
         $users = User::all();
 
@@ -106,6 +119,8 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
+        PermissionHelper::authorizeOrAbort('tasks_delete');
+        PermissionHelper::authorizeOrAbort('tasks_view');
         $task->delete();
 
         return redirect()->route('tasks.index')->with('success', 'Task silindi (bərpa oluna bilər).');

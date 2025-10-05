@@ -1,4 +1,7 @@
 {{-- resources/views/users/index.blade.php --}}
+@php
+    use App\Helpers\PermissionHelper;
+@endphp
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -51,19 +54,25 @@
                                     <td class="px-4 py-2 border">{{ $user->email }}</td>
                                     <td class="px-4 py-2 border">{{ $user->updated_at->format('d-m-Y H:i:s') ?? $user->created_at->format('d-m-Y H:i:s') }}</td>
                                     <td class="px-4 py-2 border space-x-2">
-                                        {{-- <a href="{{ route('users.show', $user->id) }}"
-                                           class="px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm">View</a> --}}
-                                        <a href="{{ route('users.edit', $user->id) }}"
-                                           class="px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 text-sm">Edit</a>
-                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="inline"
-                                              onsubmit="return confirm('Are you sure to delete this user?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button onclick="{{ route("users.destroy", $user->id) }}" type="submit"
-                                                    class="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm">
-                                                Delete
-                                            </button>
-                                        </form>
+                                        @if (PermissionHelper::checkPermission('users_view'))   
+                                            <a href="{{ route('users.show', $user->id) }}"
+                                                class="px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm">View</a>
+                                        @endif
+                                        @if(PermissionHelper::checkPermission('users_edit'))
+                                            <a href="{{ route('users.edit', $user->id) }}"
+                                                class="px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 text-sm">Edit</a>
+                                        @endif
+                                        @if (Auth::user()->isAdmin() && auth()->id() !== $user->id)
+                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="inline"
+                                                onsubmit="return confirm('Are you sure to delete this user?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button onclick="{{ route("users.destroy", $user->id) }}" type="submit"
+                                                        class="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty

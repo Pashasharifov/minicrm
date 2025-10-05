@@ -36,7 +36,7 @@
                         <tbody>
                             @php
                                 $userColors = [
-                                    'Deleted User' => 'bg-red-600 text-white',
+                                    'Deleted User' => 'text-red-600',
                                 ];
                             @endphp
                             @forelse($tasks as $index => $task)
